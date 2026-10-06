@@ -1,0 +1,50 @@
+#define SOIL_PIN 34
+
+#define IN1 26
+#define IN2 27
+
+int DRY_THRESHOLD = 2600;
+int WET_THRESHOLD = 1800;
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(SOIL_PIN, INPUT);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+
+  // Pump OFF initially
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  Serial.println("SMART IRRIGATION SYSTEM");
+}
+
+void loop() {
+
+  int moisture = analogRead(SOIL_PIN);
+
+  Serial.print("Moisture Sensor: ");
+  Serial.println(moisture);
+
+  // DRY SOIL
+  if (moisture > DRY_THRESHOLD) {
+
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+
+    Serial.println("SOIL DRY -> PUMP ON");
+  }
+
+  // WET SOIL
+  else if (moisture < WET_THRESHOLD) {
+
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+
+    Serial.println("SOIL WET -> PUMP OFF");
+  }
+
+  delay(1000);
+}
